@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Processo | LexIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo" style="font-size: 2rem; text-align: center; letter-spacing: 2px;">🤖💼</div>
+            <div class="sidebar-nav">
+                <a href="painel.html">Painel</a>
+                <a href="novo_processo.html" class="active">Novo Processo</a>
+                <a href="historico.html">Histórico</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sair do sistema
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="stepper">
+                    <div class="step active">1. Dados</div>
+                    <div class="step">2. Upload</div>
+                    <div class="step">3. Processamento</div>
+                    <div class="step">4. Relatório</div>
+                </div>
+
+                <div class="card">
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Novo processo</h1>
+                    <p>Preencha as informações básicas do caso para orientar a análise estratégica.</p>
+                    
+                    <form id="processForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label>Nome do cliente</label>
+                                <input type="text" class="form-control" placeholder="Ex.: Maria da Silva">
+                            </div>
+                            <div class="form-group">
+                                <label>Parte representada</label>
+                                <select class="form-control">
+                                    <option>Autor</option>
+                                    <option>Réu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Área do direito</label>
+                                <select class="form-control">
+                                    <option>Cível</option>
+                                    <option>Trabalhista</option>
+                                    <option>Previdenciário</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Número do processo</label>
+                                <input type="text" class="form-control" placeholder="Ex.: 0000000-00.2026.8.17.2001">
+                            </div>
+                            <div class="form-group">
+                                <label>Vara</label>
+                                <input type="text" class="form-control" placeholder="Ex.: 10ª Vara Cível">
+                            </div>
+                            <div class="form-group">
+                                <label>Comarca / Estado</label>
+                                <input type="text" class="form-control" placeholder="Ex.: Recife/PE">
+                            </div>
+                            <div class="form-group">
+                                <label>Fase processual</label>
+                                <select class="form-control">
+                                    <option>Antes do ajuizamento</option>
+                                    <option>Fase de Conhecimento</option>
+                                    <option>Fase Recursal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Objetivo da análise</label>
+                                <select class="form-control">
+                                    <option>Quero saber os riscos do processo</option>
+                                    <option>Análise de provas e contradições</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 0.5rem;">
+                            <label>Observações estratégicas</label>
+                            <textarea class="form-control" placeholder="Ex.: preciso saber se vale recorrer, se há prova suficiente ou se a contestação tem contradições."></textarea>
+                        </div>
+
+                        <div style="margin-top: 1.5rem; text-align: right;">
+                            <button type="submit" class="btn-primary">Continuar para upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
