@@ -118,7 +118,7 @@ body::before {
 }
 .sidebar-nav a {
     display: block;
-    color: var(--text-muted);
+    color: #e2e8f0;
     text-decoration: none;
     padding: 1rem 1.2rem;
     margin-bottom: 0.5rem;
@@ -132,9 +132,10 @@ body::before {
     color: var(--text-main);
 }
 .sidebar-nav a.active {
-    background-color: rgba(203, 161, 83, 0.1);
+    background-color: rgba(203, 161, 83, 0.15);
     color: var(--accent-gold);
     border-left: 3px solid var(--accent-gold);
+    font-weight: 600;
 }
 .sidebar-footer {
     margin-top: auto;
@@ -145,7 +146,7 @@ body::before {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text-muted);
+    color: #e2e8f0;
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
