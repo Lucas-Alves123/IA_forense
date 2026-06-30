@@ -61,8 +61,8 @@ body::before {
 .auth-nav .logo::before {
     content: "";
     display: inline-block;
-    width: 36px;
-    height: 36px;
+    width: 48px;
+    height: 48px;
     background-image: url('logo.png');
     background-size: contain;
     background-repeat: no-repeat;
