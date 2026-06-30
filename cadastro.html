@@ -17,30 +17,30 @@
                 <h2 style="font-size: 1.6rem; text-align: center; margin-bottom: 0.5rem; font-family: var(--font-sans);">Crie sua conta</h2>
                 <p style="text-align: center; margin-bottom: 2rem; font-size: 0.95rem;">Experimente o futuro da estratégia jurídica</p>
                 
-                <form action="painel.html">
+                <form id="cadastroForm">
                     <div class="form-group">
                         <label>Nome Completo</label>
-                        <input type="text" class="form-control" placeholder="Dr. Advogado da Silva" required>
+                        <input type="text" id="cadNome" class="form-control" placeholder="Dr. Advogado da Silva" required>
                     </div>
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label>OAB</label>
-                            <input type="text" class="form-control" placeholder="123456" required>
+                            <input type="text" id="cadOAB" class="form-control" placeholder="123456" required>
                         </div>
                         <div class="form-group">
                             <label>Estado (UF)</label>
-                            <input type="text" class="form-control" placeholder="SP" required>
+                            <input type="text" id="cadUF" class="form-control" placeholder="SP" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>E-mail</label>
-                        <input type="email" class="form-control" placeholder="advogado@escritorio.com" required>
+                        <input type="email" id="cadEmail" class="form-control" placeholder="advogado@escritorio.com" required>
                     </div>
                     <div class="form-group">
                         <label>Senha</label>
-                        <input type="password" class="form-control" placeholder="••••••••" required>
+                        <input type="password" id="cadSenha" class="form-control" placeholder="••••••••" required>
                     </div>
 
                     <button type="submit" class="btn-primary btn-block" style="margin-top: 1.5rem; padding: 0.8rem;">Criar Conta e Acessar</button>
@@ -52,5 +52,6 @@
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>

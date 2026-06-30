@@ -1,4 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Handling cadastro.html
+    const cadastroForm = document.getElementById('cadastroForm');
+    if (cadastroForm) {
+        cadastroForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('cadNome').value;
+            const email = document.getElementById('cadEmail').value;
+            localStorage.setItem('usuarioLogado', JSON.stringify({ nome, email }));
+            window.location.href = 'painel.html';
+        });
+    }
+
+    // Handling login.html
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            let user = JSON.parse(localStorage.getItem('usuarioLogado'));
+            if (!user || user.email !== email) {
+                user = { nome: "Dr(a). " + email.split('@')[0], email: email };
+                localStorage.setItem('usuarioLogado', JSON.stringify(user));
+            }
+            window.location.href = 'painel.html';
+        });
+    }
+
+    // Update painel.html greeting
+    const boasVindasText = document.getElementById('boasVindasText');
+    if (boasVindasText) {
+        const user = JSON.parse(localStorage.getItem('usuarioLogado'));
+        if (user && user.nome) {
+            boasVindasText.innerHTML = `Bem-vindo(a), <strong>${user.nome}</strong>! Aqui está o resumo das suas análises estratégicas.`;
+        }
+    }
+
     // Handling novo_processo.html
     const processForm = document.getElementById('processForm');
     if (processForm) {
