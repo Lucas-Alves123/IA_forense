@@ -105,28 +105,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (riscosCriticosEl) riscosCriticosEl.textContent = processos.filter(p => p.risco === 'Crítico').length;
     }
     
-    // Handling graficos.html (or any page with the chart)
+    // Handling chart rendering on the dashboard
     const ctx = document.getElementById('riscosChart');
     if (ctx) {
         let processos = JSON.parse(localStorage.getItem('processos')) || [];
-        
-        const graficoTotalEl = document.getElementById('graficoTotal');
-        const graficoCriticoEl = document.getElementById('graficoCritico');
-        if (graficoTotalEl) graficoTotalEl.textContent = processos.length;
-        if (graficoCriticoEl) graficoCriticoEl.textContent = processos.filter(p => p.risco === 'Crítico').length;
+        let chartInstance = null;
 
-        if (processos.length > 0 && typeof Chart !== 'undefined') {
-            const baixo = processos.filter(p => p.risco === 'Baixo').length || (processos.length === 0 ? 1 : 0);
-            const moderado = processos.filter(p => p.risco === 'Moderado').length;
-            const critico = processos.filter(p => p.risco === 'Crítico').length;
+        function renderChart() {
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            if (processos.length === 0 || typeof Chart === 'undefined') return;
+
+            const metrica = document.getElementById('graficoMetrica')?.value || 'riscos';
             
-            new Chart(ctx, {
+            let labels = [];
+            let data = [];
+            let backgroundColors = [];
+
+            if (metrica === 'riscos') {
+                const baixo = processos.filter(p => p.risco === 'Baixo').length || (processos.length === 0 ? 1 : 0);
+                const moderado = processos.filter(p => p.risco === 'Moderado').length;
+                const critico = processos.filter(p => p.risco === 'Crítico').length;
+                labels = ['Baixo', 'Moderado', 'Crítico'];
+                data = [baixo, moderado, critico];
+                backgroundColors = ['#10b981', '#f59e0b', '#ef4444'];
+            } else if (metrica === 'fases') {
+                const fasesMap = {};
+                processos.forEach(p => {
+                    fasesMap[p.fase] = (fasesMap[p.fase] || 0) + 1;
+                });
+                labels = Object.keys(fasesMap);
+                data = Object.values(fasesMap);
+                // Assign a color palette for phases
+                const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+                backgroundColors = labels.map((_, i) => colors[i % colors.length]);
+            }
+
+            chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Baixo', 'Moderado', 'Crítico'],
+                    labels: labels,
                     datasets: [{
-                        data: [baixo, moderado, critico],
-                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        data: data,
+                        backgroundColor: backgroundColors,
                         borderWidth: 0
                     }]
                 },
@@ -139,6 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        renderChart();
+
+        document.getElementById('graficoMetrica')?.addEventListener('change', renderChart);
     }
 
     // Handling historico.html

@@ -26,7 +26,6 @@
             <div class="sidebar-nav">
                 <a href="painel.html" class="active">Painel Geral</a>
                 <a href="novo_processo.html">Novo Processo</a>
-                <a href="graficos.html">Gráficos</a>
                 <a href="historico.html">Histórico</a>
             </div>
             <div class="sidebar-footer">
@@ -75,6 +74,22 @@
                         <div class="stat-value">2</div>
                     </div>
                     <div class="stat-label">Avisos de Prazo/Prescrição</div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-bottom: 2.5rem; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                    <h3 style="font-size: 1.1rem; font-family: var(--font-sans); margin: 0;">Análise Gráfica</h3>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);">Métrica:</label>
+                        <select id="graficoMetrica" class="form-control" style="margin: 0; padding: 0.4rem 1rem;">
+                            <option value="riscos">Distribuição de Riscos</option>
+                            <option value="fases">Processos por Fase</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; height: 250px;">
+                    <canvas id="riscosChart"></canvas>
                 </div>
             </div>
             
