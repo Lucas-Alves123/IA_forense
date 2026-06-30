@@ -52,35 +52,13 @@
                             <th>Ação</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>25/06/2026</td>
-                            <td>Maria da Silva</td>
-                            <td>0000000-00.2026.8.17.2001</td>
-                            <td>Cível</td>
-                            <td><span class="status done">Concluído</span></td>
-                            <td><a href="relatorio.html" style="color: var(--accent-gold); text-decoration: none; font-weight: 500;">Ver Relatório</a></td>
-                        </tr>
-                        <tr>
-                            <td>22/06/2026</td>
-                            <td>João Souza e Cia</td>
-                            <td>Consultoria Prévia</td>
-                            <td>Trabalhista</td>
-                            <td><span class="status done">Concluído</span></td>
-                            <td><a href="#" style="color: var(--accent-gold); text-decoration: none; font-weight: 500;">Ver Relatório</a></td>
-                        </tr>
-                        <tr>
-                            <td>18/06/2026</td>
-                            <td>Condomínio Edifício Lua</td>
-                            <td>0801234-56.2025.8.17.2001</td>
-                            <td>Cível</td>
-                            <td><span class="status done">Concluído</span></td>
-                            <td><a href="#" style="color: var(--accent-gold); text-decoration: none; font-weight: 500;">Ver Relatório</a></td>
-                        </tr>
+                    <tbody id="tabelaHistoricoBody">
+                        <!-- JS vai injetar os processos aqui -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>

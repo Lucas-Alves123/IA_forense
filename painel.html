@@ -6,6 +6,7 @@
     <title>Painel | Estratégia Forense IA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .table-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; }
         table { width: 100%; border-collapse: collapse; }
@@ -76,10 +77,21 @@
                 </div>
             </div>
             
-            <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-sans);">Análises Recentes</h3>
-            <div class="table-card">
-                <table>
-                    <thead>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 2rem;">
+                <!-- Gráfico de Riscos -->
+                <div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-sans);">Visão de Riscos</h3>
+                    <div class="table-card" style="display: flex; justify-content: center; align-items: center; height: 250px;">
+                        <canvas id="riscosChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabela Recentes -->
+                <div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-sans);">Análises Recentes</h3>
+                    <div class="table-card" style="height: 250px; overflow-y: auto;">
+                        <table>
+                            <thead>
                         <tr>
                             <th>Processo / Cliente</th>
                             <th>Fase</th>
@@ -94,6 +106,8 @@
                 </table>
             </div>
         </div>
+    </div>
+    </div>
     </div>
     <script src="app.js"></script>
 </body>

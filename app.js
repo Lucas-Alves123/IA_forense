@@ -103,6 +103,55 @@ document.addEventListener('DOMContentLoaded', () => {
         const riscosCriticosEl = document.getElementById('riscosCriticos');
         if (totalProcessosEl) totalProcessosEl.textContent = processos.length;
         if (riscosCriticosEl) riscosCriticosEl.textContent = processos.filter(p => p.risco === 'Crítico').length;
+
+        const ctx = document.getElementById('riscosChart');
+        if (ctx && processos.length > 0 && typeof Chart !== 'undefined') {
+            const baixo = processos.filter(p => p.risco === 'Baixo').length || (processos.length === 0 ? 1 : 0);
+            const moderado = processos.filter(p => p.risco === 'Moderado').length;
+            const critico = processos.filter(p => p.risco === 'Crítico').length;
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Baixo', 'Moderado', 'Crítico'],
+                    datasets: [{
+                        data: [baixo, moderado, critico],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1' } }
+                    }
+                }
+            });
+        }
+    }
+
+    // Handling historico.html
+    const tabelaHistoricoBody = document.getElementById('tabelaHistoricoBody');
+    if (tabelaHistoricoBody) {
+        let processos = JSON.parse(localStorage.getItem('processos')) || [];
+        if (processos.length === 0) {
+            tabelaHistoricoBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum histórico encontrado.</td></tr>';
+        } else {
+            tabelaHistoricoBody.innerHTML = '';
+            processos.forEach(proc => {
+                tabelaHistoricoBody.innerHTML += `
+                    <tr>
+                        <td>${proc.data}</td>
+                        <td>${proc.nome}</td>
+                        <td>${proc.numero}</td>
+                        <td>${proc.area}</td>
+                        <td><span class="risk-badge risk-low" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981;">Concluído</span></td>
+                        <td><a href="relatorio.html?id=${proc.id}" style="color: var(--accent-gold); text-decoration: none; font-weight: 500;">Ver Relatório</a></td>
+                    </tr>
+                `;
+            });
+        }
     }
 
     // Handling upload.html
