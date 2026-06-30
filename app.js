@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabelaProcessosBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum processo cadastrado ainda.</td></tr>';
         } else {
             tabelaProcessosBody.innerHTML = '';
-            processos.forEach(proc => {
+            processos.slice(0, 3).forEach(proc => {
                 let badgeClass = 'risk-low';
                 if (proc.risco === 'Moderado') badgeClass = 'risk-moderate';
                 if (proc.risco === 'Crítico') badgeClass = 'risk-high'; 
@@ -135,11 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabelaHistoricoBody = document.getElementById('tabelaHistoricoBody');
     if (tabelaHistoricoBody) {
         let processos = JSON.parse(localStorage.getItem('processos')) || [];
-        if (processos.length === 0) {
-            tabelaHistoricoBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum histórico encontrado.</td></tr>';
-        } else {
+        function renderHistorico(filtro = '') {
+            if (processos.length === 0) {
+                tabelaHistoricoBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum histórico encontrado.</td></tr>';
+                return;
+            }
+            
+            const processosFiltrados = processos.filter(p => 
+                p.nome.toLowerCase().includes(filtro.toLowerCase()) || 
+                p.numero.toLowerCase().includes(filtro.toLowerCase())
+            );
+
+            if (processosFiltrados.length === 0) {
+                tabelaHistoricoBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum processo encontrado com este filtro.</td></tr>';
+                return;
+            }
+
             tabelaHistoricoBody.innerHTML = '';
-            processos.forEach(proc => {
+            processosFiltrados.forEach(proc => {
                 let badgeClass = 'risk-low';
                 if (proc.risco === 'Moderado') badgeClass = 'risk-moderate';
                 if (proc.risco === 'Crítico') badgeClass = 'risk-high'; 
@@ -158,6 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td><a href="relatorio.html?id=${proc.id}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Ver Relatório</a></td>
                     </tr>
                 `;
+            });
+        }
+        
+        renderHistorico();
+        
+        const buscaInput = document.getElementById('buscaHistorico');
+        if (buscaInput) {
+            buscaInput.addEventListener('input', (e) => {
+                renderHistorico(e.target.value);
             });
         }
     }
