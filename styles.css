@@ -59,8 +59,14 @@ body::before {
     gap: 0.5rem;
 }
 .auth-nav .logo::before {
-    content: "🤖💼";
-    font-size: 1.3rem;
+    content: "";
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-image: url('logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .auth-nav .nav-link {
     color: var(--text-muted);
