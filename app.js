@@ -135,24 +135,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabelaHistoricoBody = document.getElementById('tabelaHistoricoBody');
     if (tabelaHistoricoBody) {
         let processos = JSON.parse(localStorage.getItem('processos')) || [];
-        function renderHistorico(filtro = '') {
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let currentFiltro = '';
+        
+        function renderHistorico() {
+            const paginacaoDiv = document.getElementById('paginacaoHistorico');
+            
             if (processos.length === 0) {
                 tabelaHistoricoBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum histórico encontrado.</td></tr>';
+                if (paginacaoDiv) paginacaoDiv.innerHTML = '';
                 return;
             }
             
             const processosFiltrados = processos.filter(p => 
-                p.nome.toLowerCase().includes(filtro.toLowerCase()) || 
-                p.numero.toLowerCase().includes(filtro.toLowerCase())
+                p.nome.toLowerCase().includes(currentFiltro.toLowerCase()) || 
+                p.numero.toLowerCase().includes(currentFiltro.toLowerCase())
             );
 
             if (processosFiltrados.length === 0) {
                 tabelaHistoricoBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum processo encontrado com este filtro.</td></tr>';
+                if (paginacaoDiv) paginacaoDiv.innerHTML = '';
                 return;
             }
 
+            const totalPages = Math.ceil(processosFiltrados.length / itemsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentItems = processosFiltrados.slice(startIndex, endIndex);
+
             tabelaHistoricoBody.innerHTML = '';
-            processosFiltrados.forEach(proc => {
+            currentItems.forEach(proc => {
                 let badgeClass = 'risk-low';
                 if (proc.risco === 'Moderado') badgeClass = 'risk-moderate';
                 if (proc.risco === 'Crítico') badgeClass = 'risk-high'; 
@@ -172,6 +188,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     </tr>
                 `;
             });
+            
+            if (paginacaoDiv) {
+                if (totalPages > 1) {
+                    paginacaoDiv.innerHTML = `
+                        <button id="prevPage" class="btn-secondary" style="padding: 0.4rem 0.8rem; opacity: ${currentPage === 1 ? '0.5' : '1'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'};" ${currentPage === 1 ? 'disabled' : ''}>&larr; Anterior</button>
+                        <span style="color: var(--text-muted); font-size: 0.9rem;">Página ${currentPage} de ${totalPages}</span>
+                        <button id="nextPage" class="btn-secondary" style="padding: 0.4rem 0.8rem; opacity: ${currentPage === totalPages ? '0.5' : '1'}; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'};" ${currentPage === totalPages ? 'disabled' : ''}>Próxima &rarr;</button>
+                    `;
+                    document.getElementById('prevPage')?.addEventListener('click', () => { if(currentPage > 1) { currentPage--; renderHistorico(); } });
+                    document.getElementById('nextPage')?.addEventListener('click', () => { if(currentPage < totalPages) { currentPage++; renderHistorico(); } });
+                } else {
+                    paginacaoDiv.innerHTML = '';
+                }
+            }
         }
         
         renderHistorico();
@@ -179,7 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const buscaInput = document.getElementById('buscaHistorico');
         if (buscaInput) {
             buscaInput.addEventListener('input', (e) => {
-                renderHistorico(e.target.value);
+                currentFiltro = e.target.value;
+                currentPage = 1;
+                renderHistorico();
             });
         }
     }
