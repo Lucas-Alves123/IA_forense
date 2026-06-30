@@ -50,24 +50,24 @@
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">1. Identificação</h3>
                         <div style="color: var(--text-muted); font-size: 0.95rem;">
-                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Cliente:</strong> Cliente não informado</p>
-                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Parte representada:</strong> Autor</p>
-                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Processo:</strong> Não informado</p>
-                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Área:</strong> Cível</p>
-                            <p style="margin-bottom: 0;"><strong style="color: var(--text-main);">Fase:</strong> Antes do ajuizamento</p>
+                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Cliente:</strong> <span id="relCliente">Cliente não informado</span></p>
+                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Parte representada:</strong> <span id="relParte">Autor</span></p>
+                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Processo:</strong> <span id="relProcesso">Não informado</span></p>
+                            <p style="margin-bottom: 0.5rem;"><strong style="color: var(--text-main);">Área:</strong> <span id="relArea">Cível</span></p>
+                            <p style="margin-bottom: 0;"><strong style="color: var(--text-main);">Fase:</strong> <span id="relFase">Antes do ajuizamento</span></p>
                         </div>
                     </div>
 
                     <!-- 2. Síntese do caso -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">2. Síntese do caso</h3>
-                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Com base nos dados inseridos, trata-se de análise estratégica preliminar voltada à identificação dos principais riscos, provas relevantes e providências úteis para a condução do caso. Na versão final, esta seção será preenchida a partir da leitura integral dos documentos enviados.</p>
+                        <p id="relSintese" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Com base nos dados inseridos, trata-se de análise estratégica preliminar voltada à identificação dos principais riscos, provas relevantes e providências úteis para a condução do caso. Na versão final, esta seção será preenchida a partir da leitura integral dos documentos enviados.</p>
                     </div>
 
                     <!-- 3. Documentos analisados -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">3. Documentos analisados</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relDocumentos" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">PDF principal do processo ou documentos avulsos enviados pelo advogado.</li>
                             <li style="margin-bottom: 0.3rem;">Peças processuais eventualmente identificadas no arquivo: inicial, contestação, decisões, sentença, comprovantes, contratos, laudos ou anexos.</li>
                             <li>Documentos que não forem reconhecidos deverão ser classificados como "documento não identificado".</li>
@@ -77,7 +77,7 @@
                     <!-- 4. Pontos favoráveis -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">4. Pontos favoráveis</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relFavoraveis" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Existência de narrativa processual estruturada e passível de organização por fase.</li>
                             <li style="margin-bottom: 0.3rem;">Possibilidade de separar os documentos por relevância probatória.</li>
                             <li>Possibilidade de identificar contradições entre alegações e documentos.</li>
@@ -87,7 +87,7 @@
                     <!-- 5. Pontos desfavoráveis -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">5. Pontos desfavoráveis</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relDesfavoraveis" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Eventual ausência de documento essencial poderá comprometer a força da tese.</li>
                             <li style="margin-bottom: 0.3rem;">PDFs escaneados ou de baixa qualidade podem exigir OCR para leitura adequada.</li>
                             <li>Pedidos sem prova documental suficiente devem ser tratados com cautela.</li>
@@ -97,7 +97,7 @@
                     <!-- 6. Provas fortes -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">6. Provas fortes</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relProvasFortes" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Contratos, comprovantes, decisões, laudos, prints, notificações e documentos oficiais.</li>
                             <li style="margin-bottom: 0.3rem;">Confissões ou contradições existentes em contestação, recurso ou manifestação adversa.</li>
                             <li>Documentos produzidos pela própria parte contrária que confirmem algum ponto da tese.</li>
@@ -107,7 +107,7 @@
                     <!-- 7. Provas frágeis ou ausentes -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">7. Provas frágeis ou ausentes</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relProvasFrageis" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Alegações sem documento correspondente.</li>
                             <li style="margin-bottom: 0.3rem;">Dano material sem comprovante específico.</li>
                             <li style="margin-bottom: 0.3rem;">Dano moral sem demonstração concreta da gravidade do fato.</li>
@@ -118,26 +118,28 @@
                     <!-- 8. Contradições encontradas -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">8. Contradições encontradas</h3>
-                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Na versão final, esta seção apontará divergências entre inicial, contestação, documentos, decisões e demais peças. O sistema deverá indicar a origem da contradição e sua utilidade estratégica.</p>
+                        <p id="relContradicoes" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Na versão final, esta seção apontará divergências entre inicial, contestação, documentos, decisões e demais peças. O sistema deverá indicar a origem da contradição e sua utilidade estratégica.</p>
                     </div>
 
                     <!-- 9. Riscos processuais -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">9. Riscos processuais</h3>
-                        <div style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
-                            <span style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;">Risco moderado</span>
-                            <p style="color: var(--text-muted); margin: 0; line-height: 1.4; font-size: 0.95rem;">A qualidade da estratégia dependerá da suficiência documental e da coerência entre fatos, fundamentos e pedidos.</p>
-                        </div>
-                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
-                            <span style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;">Risco alto</span>
-                            <p style="color: var(--text-muted); margin: 0; line-height: 1.4; font-size: 0.95rem;">Caso o processo contenha documentos ilegíveis, incompletos ou contraditórios, a análise deverá indicar expressamente a limitação.</p>
+                        <div id="relRiscos">
+                            <div style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
+                                <span style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid #f59e0b; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;">Risco moderado</span>
+                                <p style="color: var(--text-muted); margin: 0; line-height: 1.4; font-size: 0.95rem;">A qualidade da estratégia dependerá da suficiência documental e da coerência entre fatos, fundamentos e pedidos.</p>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                                <span style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;">Risco alto</span>
+                                <p style="color: var(--text-muted); margin: 0; line-height: 1.4; font-size: 0.95rem;">Caso o processo contenha documentos ilegíveis, incompletos ou contraditórios, a análise deverá indicar expressamente a limitação.</p>
+                            </div>
                         </div>
                     </div>
 
                     <!-- 10. Teses possíveis -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">10. Teses possíveis</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relTeses" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Responsabilidade civil ou contratual, conforme a área selecionada.</li>
                             <li style="margin-bottom: 0.3rem;">Falha de impugnação específica, quando a contestação não enfrentar documentos essenciais.</li>
                             <li style="margin-bottom: 0.3rem;">Necessidade de produção de prova documental, testemunhal ou pericial.</li>
@@ -148,7 +150,7 @@
                     <!-- 11. Teses não recomendadas -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">11. Teses não recomendadas</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relTesesNaoRecomendadas" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Teses sem prova documental mínima.</li>
                             <li style="margin-bottom: 0.3rem;">Pedidos excessivos sem correspondência nos fatos.</li>
                             <li style="margin-bottom: 0.3rem;">Alegações de urgência sem demonstração atual do risco.</li>
@@ -159,13 +161,13 @@
                     <!-- 12. Providência prioritária -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">12. Providência prioritária</h3>
-                        <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Objetivo selecionado: Quero saber os riscos do processo. Na versão final, a IA deverá ajustar a providência recomendada conforme os documentos analisados e a fase processual.</p>
+                        <p id="relProvidencia" style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">Objetivo selecionado: Quero saber os riscos do processo. Na versão final, a IA deverá ajustar a providência recomendada conforme os documentos analisados e a fase processual.</p>
                     </div>
 
                     <!-- 13. Próximos passos -->
                     <div style="margin-bottom: 2rem;">
                         <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 1rem; padding-left: 0.8rem; border-left: 3px solid var(--accent-gold);">13. Próximos passos</h3>
-                        <ul style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
+                        <ul id="relProximosPassos" style="color: var(--text-muted); line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
                             <li style="margin-bottom: 0.3rem;">Revisar documentos faltantes.</li>
                             <li style="margin-bottom: 0.3rem;">Conferir valor da causa, pedidos e provas.</li>
                             <li style="margin-bottom: 0.3rem;">Separar jurisprudência apenas com fonte verificável.</li>
@@ -194,5 +196,6 @@
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>

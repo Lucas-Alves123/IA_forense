@@ -49,14 +49,14 @@
                 <div class="stat-card">
                     <div class="stat-card-header">
                         <div style="color: #fff; font-size: 1.5rem; background: #3b82f6; padding: 0.6rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(59,130,246,0.3);">📄</div>
-                        <div class="stat-value">12</div>
+                        <div class="stat-value" id="totalProcessos">0</div>
                     </div>
                     <div class="stat-label">Processos Analisados</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-card-header">
                         <div style="color: #fff; font-size: 1.5rem; background: #ef4444; padding: 0.6rem; border-radius: 10px; box-shadow: 0 4px 10px rgba(239,68,68,0.3);">⚠️</div>
-                        <div class="stat-value">5</div>
+                        <div class="stat-value" id="riscosCriticos">0</div>
                     </div>
                     <div class="stat-label">Riscos Críticos Detectados</div>
                 </div>
@@ -88,27 +88,8 @@
                             <th>Ação</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style="font-weight: 600;">João da Silva vs. Empresa X</div>
-                                <div style="font-size: 0.8rem; color: var(--text-muted);">0012345-67.2023.8.26.0000</div>
-                            </td>
-                            <td>Contestação</td>
-                            <td><span class="risk-badge risk-moderate">Moderado</span></td>
-                            <td>Hoje, 10:45</td>
-                            <td><a href="relatorio.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Ver Relatório</a></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="font-weight: 600;">Maria Oliveira (Divórcio)</div>
-                                <div style="font-size: 0.8rem; color: var(--text-muted);">1055555-88.2023.8.26.0100</div>
-                            </td>
-                            <td>Petição Inicial</td>
-                            <td><span class="risk-badge risk-low">Baixo</span></td>
-                            <td>Ontem, 16:30</td>
-                            <td><a href="relatorio.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Ver Relatório</a></td>
-                        </tr>
+                    <tbody id="tabelaProcessosBody">
+                        <!-- JS vai injetar os processos aqui -->
                     </tbody>
                 </table>
             </div>
