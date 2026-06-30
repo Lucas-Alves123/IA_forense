@@ -137,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let processos = JSON.parse(localStorage.getItem('processos')) || [];
         let currentPage = 1;
         const itemsPerPage = 10;
-        let currentFiltro = '';
         
         function renderHistorico() {
             const paginacaoDiv = document.getElementById('paginacaoHistorico');
@@ -148,10 +147,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            const processosFiltrados = processos.filter(p => 
-                p.nome.toLowerCase().includes(currentFiltro.toLowerCase()) || 
-                p.numero.toLowerCase().includes(currentFiltro.toLowerCase())
-            );
+            const txt = (document.getElementById('filtroTexto')?.value || '').toLowerCase();
+            const risco = document.getElementById('filtroRisco')?.value || '';
+            const dataFiltro = document.getElementById('filtroData')?.value || '';
+            
+            let dataFormatada = '';
+            if (dataFiltro) {
+                const parts = dataFiltro.split('-');
+                if (parts.length === 3) {
+                    dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                }
+            }
+
+            const processosFiltrados = processos.filter(p => {
+                const matchTexto = p.nome.toLowerCase().includes(txt) || p.numero.toLowerCase().includes(txt);
+                const matchRisco = risco === '' || p.risco === risco;
+                const matchData = dataFormatada === '' || p.data === dataFormatada;
+                return matchTexto && matchRisco && matchData;
+            });
 
             if (processosFiltrados.length === 0) {
                 tabelaHistoricoBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Nenhum processo encontrado com este filtro.</td></tr>';
@@ -206,14 +219,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderHistorico();
         
-        const buscaInput = document.getElementById('buscaHistorico');
-        if (buscaInput) {
-            buscaInput.addEventListener('input', (e) => {
-                currentFiltro = e.target.value;
-                currentPage = 1;
-                renderHistorico();
-            });
-        }
+        const applyFilters = () => { currentPage = 1; renderHistorico(); };
+        
+        document.getElementById('filtroTexto')?.addEventListener('input', applyFilters);
+        document.getElementById('filtroRisco')?.addEventListener('change', applyFilters);
+        document.getElementById('filtroData')?.addEventListener('change', applyFilters);
+        
+        document.getElementById('limparFiltros')?.addEventListener('click', () => {
+            if(document.getElementById('filtroTexto')) document.getElementById('filtroTexto').value = '';
+            if(document.getElementById('filtroRisco')) document.getElementById('filtroRisco').value = '';
+            if(document.getElementById('filtroData')) document.getElementById('filtroData').value = '';
+            applyFilters();
+        });
     }
 
     // Handling upload.html

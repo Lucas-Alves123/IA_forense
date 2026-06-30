@@ -41,9 +41,27 @@
             <p style="margin-bottom: 2.5rem;">Consulte os relatórios estratégicos já gerados pelo sistema.</p>
 
             <div class="card" style="padding: 1rem;">
-                <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                    <input type="text" id="buscaHistorico" class="form-control" placeholder="Buscar por cliente ou processo..." style="max-width: 350px; padding: 0.6rem 1rem; margin-bottom: 0;">
-                    <button class="btn-secondary" style="padding: 0.6rem 1rem; text-decoration: none;">Filtrar</button>
+                <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <div style="flex: 2; min-width: 200px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; display: block;">Processo ou Cliente</label>
+                        <input type="text" id="filtroTexto" class="form-control" placeholder="Digite para buscar..." style="margin-bottom: 0; padding: 0.6rem 1rem;">
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; display: block;">Risco Geral</label>
+                        <select id="filtroRisco" class="form-control" style="margin-bottom: 0; padding: 0.6rem 1rem;">
+                            <option value="">Todos os riscos</option>
+                            <option value="Baixo">Baixo</option>
+                            <option value="Moderado">Moderado</option>
+                            <option value="Crítico">Crítico</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; display: block;">Data</label>
+                        <input type="date" id="filtroData" class="form-control" style="margin-bottom: 0; padding: 0.6rem 1rem;">
+                    </div>
+                    <div>
+                        <button id="limparFiltros" class="btn-secondary" style="padding: 0.6rem 1rem;">Limpar</button>
+                    </div>
                 </div>
                 <table>
                     <thead>
