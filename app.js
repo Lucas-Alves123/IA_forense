@@ -140,14 +140,22 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             tabelaHistoricoBody.innerHTML = '';
             processos.forEach(proc => {
+                let badgeClass = 'risk-low';
+                if (proc.risco === 'Moderado') badgeClass = 'risk-moderate';
+                if (proc.risco === 'Crítico') badgeClass = 'risk-high'; 
+                
+                const styleHigh = proc.risco === 'Crítico' ? 'background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444;' : '';
+
                 tabelaHistoricoBody.innerHTML += `
                     <tr>
+                        <td>
+                            <div style="font-weight: 600;">${proc.nome}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">${proc.numero}</div>
+                        </td>
+                        <td>${proc.fase}</td>
+                        <td><span class="risk-badge ${badgeClass}" style="${styleHigh}">${proc.risco}</span></td>
                         <td>${proc.data}</td>
-                        <td>${proc.nome}</td>
-                        <td>${proc.numero}</td>
-                        <td>${proc.area}</td>
-                        <td><span class="risk-badge risk-low" style="background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981;">Concluído</span></td>
-                        <td><a href="relatorio.html?id=${proc.id}" style="color: var(--accent-gold); text-decoration: none; font-weight: 500;">Ver Relatório</a></td>
+                        <td><a href="relatorio.html?id=${proc.id}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Ver Relatório</a></td>
                     </tr>
                 `;
             });
