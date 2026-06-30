@@ -35,10 +35,29 @@
             <h1 style="font-size: 2rem; margin-bottom: 0.5rem; font-family: var(--font-sans);">Relatórios e Gráficos</h1>
             <p style="margin-bottom: 2.5rem; color: var(--text-muted);">Visão gerencial e métricas de todos os processos do sistema.</p>
 
-            <div style="max-width: 800px; margin: 0 auto;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--font-sans); text-align: center;">Distribuição Geral de Riscos</h3>
-                <div class="table-card" style="display: flex; justify-content: center; align-items: center; height: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-                    <canvas id="riscosChart"></canvas>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="stat-card" style="background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div class="stat-card-header">
+                            <div style="color: #fff; font-size: 1.5rem; background: #3b82f6; padding: 0.6rem; border-radius: 10px;">📄</div>
+                            <div class="stat-value" id="graficoTotal">0</div>
+                        </div>
+                        <div class="stat-label">Total de Processos Analisados</div>
+                    </div>
+                    <div class="stat-card" style="background: var(--card-bg); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div class="stat-card-header">
+                            <div style="color: #fff; font-size: 1.5rem; background: #ef4444; padding: 0.6rem; border-radius: 10px;">⚠️</div>
+                            <div class="stat-value" id="graficoCritico">0</div>
+                        </div>
+                        <div class="stat-label">Riscos Críticos Detectados</div>
+                    </div>
+                </div>
+
+                <div class="table-card" style="display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 2rem; font-family: var(--font-sans); width: 100%; text-align: left; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Distribuição Geral de Riscos</h3>
+                    <div style="width: 100%; max-width: 400px; height: 300px;">
+                        <canvas id="riscosChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>

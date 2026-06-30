@@ -109,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('riscosChart');
     if (ctx) {
         let processos = JSON.parse(localStorage.getItem('processos')) || [];
+        
+        const graficoTotalEl = document.getElementById('graficoTotal');
+        const graficoCriticoEl = document.getElementById('graficoCritico');
+        if (graficoTotalEl) graficoTotalEl.textContent = processos.length;
+        if (graficoCriticoEl) graficoCriticoEl.textContent = processos.filter(p => p.risco === 'Crítico').length;
+
         if (processos.length > 0 && typeof Chart !== 'undefined') {
             const baixo = processos.filter(p => p.risco === 'Baixo').length || (processos.length === 0 ? 1 : 0);
             const moderado = processos.filter(p => p.risco === 'Moderado').length;
