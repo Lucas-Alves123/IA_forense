@@ -453,37 +453,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Acessibilidade Global ---
     const body = document.body;
-    
+
+    // Wheelchair / accessibility SVG icon
+    const wheelchairSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="4" r="2"/>
+        <path d="M10.5 8.5L9 14l3 2v6h2v-7l-3-2 1.5-4.5H16V7h-5.5z"/>
+        <path d="M7.5 21.5A5 5 0 0 1 6 12.5V10H4v2.5a7 7 0 0 0 7 7v-2.5a4.5 4.5 0 0 1-3.5-5.5"/>
+    </svg>`;
+
     // Create the Accessibility Button
     const accBtn = document.createElement('button');
     accBtn.className = 'accessibility-btn';
-    accBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>';
+    accBtn.innerHTML = wheelchairSVG;
     accBtn.title = "Acessibilidade";
-    
+
     // Create the Menu
     const accMenu = document.createElement('div');
     accMenu.className = 'accessibility-menu';
     accMenu.innerHTML = `
+        <div style="padding: 0.6rem 1rem; font-size: 0.75rem; color: #64748b; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid #334155; margin-bottom: 0.3rem;">Acessibilidade</div>
         <button id="accIncreaseFont"><span>A+</span> Aumentar Fonte</button>
         <button id="accDecreaseFont"><span>A-</span> Diminuir Fonte</button>
         <button id="accHighContrast"><span>◑</span> Alto Contraste</button>
         <button id="accVoiceRead"><span>🔊</span> Leitura em Voz</button>
     `;
-    
-    body.appendChild(accBtn);
-    body.appendChild(accMenu);
-    
-    // Toggle menu
-    accBtn.addEventListener('click', () => {
-        accMenu.classList.toggle('show');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!accBtn.contains(e.target) && !accMenu.contains(e.target)) {
-            accMenu.classList.remove('show');
-        }
-    });
+
+    // Smart placement: if sidebar exists, inject before "Sair do sistema"; else float
+    const sidebarFooter = document.querySelector('.sidebar-footer');
+    if (sidebarFooter) {
+        // Place button inline inside sidebar, above the footer
+        const accSidebarWrapper = document.createElement('div');
+        accSidebarWrapper.style.cssText = 'margin-top: auto; padding-bottom: 0.5rem;';
+
+        const accSidebarBtn = document.createElement('button');
+        accSidebarBtn.style.cssText = `
+            display: flex; align-items: center; gap: 0.6rem;
+            background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.2);
+            color: #a5b4fc; width: 100%; padding: 0.8rem 1rem;
+            border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500;
+            font-family: 'Inter', sans-serif; transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        `;
+        accSidebarBtn.innerHTML = wheelchairSVG + ' <span>Acessibilidade</span>';
+        accSidebarBtn.onmouseenter = () => accSidebarBtn.style.background = 'rgba(99,102,241,0.15)';
+        accSidebarBtn.onmouseleave = () => accSidebarBtn.style.background = 'rgba(99,102,241,0.08)';
+
+        // reposition menu relative to sidebar
+        accMenu.style.cssText = 'position: fixed; bottom: auto; left: 0; top: auto; width: 250px;';
+
+        accSidebarWrapper.appendChild(accSidebarBtn);
+        sidebarFooter.parentNode.insertBefore(accSidebarWrapper, sidebarFooter);
+        body.appendChild(accMenu);
+
+        accSidebarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rect = accSidebarBtn.getBoundingClientRect();
+            accMenu.style.left = rect.right + 10 + 'px';
+            accMenu.style.top = (rect.top - 10) + 'px';
+            accMenu.classList.toggle('show');
+        });
+        document.addEventListener('click', (e) => {
+            if (!accSidebarBtn.contains(e.target) && !accMenu.contains(e.target)) {
+                accMenu.classList.remove('show');
+            }
+        });
+    } else {
+        // No sidebar — floating button (landing/login pages)
+        accBtn.style.cssText = 'position:fixed;bottom:20px;left:20px;';
+        body.appendChild(accBtn);
+        body.appendChild(accMenu);
+        accBtn.addEventListener('click', () => {
+            accMenu.classList.toggle('show');
+        });
+        document.addEventListener('click', (e) => {
+            if (!accBtn.contains(e.target) && !accMenu.contains(e.target)) {
+                accMenu.classList.remove('show');
+            }
+        });
+    }
     
     // Font Size Logic
     let currentFontSize = 100; // Percentage
