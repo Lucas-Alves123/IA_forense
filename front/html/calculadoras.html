@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras | Estratégia Forense IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .result-box-green {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            line-height: 2;
+        }
+        .result-box-red {
+            background: rgba(180, 30, 30, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            line-height: 2;
+        }
+        .trabalhista-sub-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .trabalhista-sub-tab {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .trabalhista-sub-tab.active {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: #6366f1;
+            color: #818cf8;
+            font-weight: 500;
+        }
+        .trab-section { display: none; }
+        .trab-section.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-logo" style="text-align: center;">
+                <img src="../img/logo.png" alt="LexIA Logo" style="max-width: 90px; height: auto;">
+            </div>
+            <div class="sidebar-nav">
+                <a href="painel.html">Painel Geral</a>
+                <a href="novo_processo.html">Novo Processo</a>
+                <a href="historico.html">Histórico</a>
+                <a href="calculadoras.html" class="active">Calculadoras</a>
+                <a href="peticoes.html">Petições</a>
+                <a href="email_ia.html">E-mail IA</a>
+                <a href="jurisprudencia.html">Jurisprudência</a>
+                <a href="transcricao.html">Áudio/Vídeo</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sair do sistema
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Header -->
+            <div class="card" style="margin-bottom: 2rem; padding: 2rem 2.5rem;">
+                <h1 style="font-size: 1.8rem; margin-bottom: 0.3rem; font-family: var(--font-sans);">Calculadoras Jurídicas</h1>
+                <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">Ferramentas essenciais para o dia a dia forense. Selecione a categoria abaixo.</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="card calc-tabs-container" id="calcTabs" style="margin-bottom: 0;">
+                <button class="calc-tab active" data-target="calcPrazos">📅 Prazos</button>
+                <button class="calc-tab" data-target="calcJuros">💰 Juros & Correção</button>
+                <button class="calc-tab" data-target="calcAbusivos">⚠️ Juros Abusivos</button>
+                <button class="calc-tab" data-target="calcPensao">👨‍👩‍👧‍👦 Pensão Alimentícia</button>
+                <button class="calc-tab" data-target="calcPenal">⚖️ Execução Penal</button>
+                <button class="calc-tab" data-target="calcHabitacional">🏠 Habitacional (SAC/PRICE)</button>
+                <button class="calc-tab" data-target="calcTrabalhista">👨‍⚖️ Trabalhista</button>
+            </div>
+
+            <!-- PRAZOS -->
+            <div id="calcPrazos" class="card calc-section" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Calculadora de Prazos</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">CPC art. 219: prazos em dias úteis. Suspensão no recesso forense (20/12 a 20/01).</p>
+                <div class="form-group">
+                    <label>DATA DA INTIMAÇÃO/PUBLICAÇÃO</label>
+                    <input type="date" id="dataIntimacao" class="form-control">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>PRAZO (EM DIAS)</label>
+                        <input type="number" id="prazoDias" class="form-control" value="15">
+                    </div>
+                    <div class="form-group">
+                        <label>TIPO</label>
+                        <select id="tipoPrazo" class="form-control">
+                            <option value="uteis">Dias úteis (processo civil)</option>
+                            <option value="corridos">Dias corridos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group" style="margin-top: 1rem;">
+                    <label class="custom-checkbox"><input type="checkbox" id="checkArt224" checked><span class="checkmark"></span>INICIAR NO 1º DIA ÚTIL SEGUINTE À INTIMAÇÃO (CPC ART. 224)</label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="custom-checkbox"><input type="checkbox" id="checkRecesso" checked><span class="checkmark"></span>SUSPENDER PRAZO NO RECESSO FORENSE</label>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <button type="button" class="btn-primary" style="padding: 0.8rem 2rem;" onclick="calcPrazos()">Calcular prazo</button>
+                </div>
+                <div id="resultPrazos" class="result-box-green hidden">
+                    <div id="resultPrazosText"></div>
+                </div>
+            </div>
+
+            <!-- JUROS & CORREÇÃO -->
+            <div id="calcJuros" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Juros e correção monetária</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Estimativa. Para precisão de SELIC/IPCA reais, sempre confira os índices oficiais.</p>
+                <div class="form-group">
+                    <label>VALOR PRINCIPAL (R$)</label>
+                    <input type="number" id="jcValor" class="form-control" value="10000">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>DATA INICIAL</label>
+                        <input type="date" id="jcDataInicial" class="form-control" value="2024-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label>DATA FINAL</label>
+                        <input type="date" id="jcDataFinal" class="form-control">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>JUROS MENSAIS (%)</label>
+                        <input type="number" id="jcJuros" class="form-control" value="1" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>TIPO DE JUROS</label>
+                        <select id="jcTipo" class="form-control">
+                            <option value="simples">Simples (1% a.m. — clássico)</option>
+                            <option value="compostos">Compostos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>CORREÇÃO MONETÁRIA ANUAL (% A.A.) — ESTIMATIVA IPCA</label>
+                    <input type="number" id="jcIPCA" class="form-control" value="4.5" step="0.1">
+                </div>
+                <div style="margin-top: 2rem;">
+                    <button type="button" class="btn-primary" style="padding: 0.8rem 2rem;" onclick="calcJuros()">Calcular</button>
+                </div>
+                <div id="resultJuros" class="result-box-green hidden">
+                    <div id="resultJurosText"></div>
+                </div>
+            </div>
+
+            <!-- JUROS ABUSIVOS -->
+            <div id="calcAbusivos" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Juros abusivos — revisão contratual</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Critério do STJ (REsp 1.061.530/RS): considera-se abusiva a taxa que supera em ≈50% a taxa média de mercado divulgada pelo BACEN. Consulte as taxas médias em bcb.gov.br/estatisticas/txjuros.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>TAXA CONTRATADA (% AO MÊS)</label>
+                        <input type="number" id="abTaxaContratada" class="form-control" value="8" step="0.01" oninput="calcAbusivos()">
+                    </div>
+                    <div class="form-group">
+                        <label>TAXA MÉDIA BCB (% AO MÊS)</label>
+                        <input type="number" id="abTaxaBCB" class="form-control" value="3.5" step="0.01" oninput="calcAbusivos()">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>VALOR FINANCIADO (R$)</label>
+                        <input type="number" id="abValor" class="form-control" value="10000" oninput="calcAbusivos()">
+                    </div>
+                    <div class="form-group">
+                        <label>PRAZO (MESES)</label>
+                        <input type="number" id="abPrazo" class="form-control" value="24" oninput="calcAbusivos()">
+                    </div>
+                </div>
+                <div id="resultAbusivos" class="result-box-red">
+                    <p style="font-weight: 700; margin-bottom: 0.5rem;">⚠️ Indício de abusividade</p>
+                    <div id="resultAbusivosText"></div>
+                    <p style="font-size: 0.82rem; color: #818cf8; margin-top: 0.8rem;">Fundamentos: Súmula 596 STF, art. 51 CDC, art. 39 CDC, REsp 1.061.530/RS.</p>
+                </div>
+            </div>
+
+            <!-- PENSÃO ALIMENTÍCIA -->
+            <div id="calcPensao" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Pensão alimentícia</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Referência: art. 1.694 CC, Lei 5.478/68. O binômio necessidade × possibilidade é sempre avaliado pelo juízo — este é um estimador.</p>
+                <p style="font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-muted);">Cálculo sobre o líquido</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>SALÁRIO BRUTO DO ALIMENTANTE (R$)</label>
+                        <input type="number" id="pensBruto" class="form-control" value="5000" oninput="calcPensao()">
+                    </div>
+                    <div class="form-group">
+                        <label>INSS (%)</label>
+                        <input type="number" id="pensINSS" class="form-control" value="11" step="0.1" oninput="calcPensao()">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>IRRF (R$)</label>
+                        <input type="number" id="pensIRRF" class="form-control" value="0" oninput="calcPensao()">
+                    </div>
+                    <div class="form-group">
+                        <label>OUTROS DESCONTOS LEGAIS (R$)</label>
+                        <input type="number" id="pensOutros" class="form-control" value="0" oninput="calcPensao()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>PERCENTUAL DA PENSÃO (%)</label>
+                    <input type="number" id="pensPerc" class="form-control" value="30" oninput="calcPensao()">
+                </div>
+                <p style="font-size: 0.9rem; font-weight: 600; margin: 1.5rem 0 1rem; color: var(--text-muted);">Débito de alimentos atrasados</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>MESES EM ATRASO</label>
+                        <input type="number" id="pensMesesAtraso" class="form-control" value="0" oninput="calcPensao()">
+                    </div>
+                    <div class="form-group">
+                        <label>SELIC MENSAL (%)</label>
+                        <input type="number" id="pensSELIC" class="form-control" value="1" step="0.01" oninput="calcPensao()">
+                    </div>
+                </div>
+                <div id="resultPensao" class="result-box-green">
+                    <div id="resultPensaoText"></div>
+                </div>
+            </div>
+
+            <!-- EXECUÇÃO PENAL -->
+            <div id="calcPenal" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Execução penal — progressão, remição e detração</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Base: Lei 7.210/84 (LEP) e Lei 13.964/19 (Pacote Anticrime). Fração de progressão do art. 112 LEP.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>TOTAL DA PENA (DIAS)</label>
+                        <input type="number" id="penalTotal" class="form-control" value="1825" oninput="calcPenal()">
+                    </div>
+                    <div class="form-group">
+                        <label>REGIME ATUAL</label>
+                        <select id="penalRegime" class="form-control" onchange="calcPenal()">
+                            <option>Fechado</option>
+                            <option>Semiaberto</option>
+                            <option>Aberto</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>TIPO DO CRIME</label>
+                        <select id="penalTipo" class="form-control" onchange="calcPenal()">
+                            <option value="16">Comum sem violência</option>
+                            <option value="20">Comum com violência</option>
+                            <option value="40">Hediondo primário</option>
+                            <option value="60">Hediondo reincidente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>CONDIÇÃO DO APENADO</label>
+                        <select id="penalCondicao" class="form-control" onchange="calcPenal()">
+                            <option>Primário</option>
+                            <option>Reincidente</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>DIAS TRABALHADOS (REMIÇÃO ART. 126 LEP)</label>
+                        <input type="number" id="penalTrab" class="form-control" value="0" oninput="calcPenal()">
+                    </div>
+                    <div class="form-group">
+                        <label>HORAS DE ESTUDO</label>
+                        <input type="number" id="penalEstudo" class="form-control" value="0" oninput="calcPenal()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>DETRAÇÃO (PRISÃO PROVISÓRIA EM DIAS)</label>
+                    <input type="number" id="penalDetracao" class="form-control" value="0" oninput="calcPenal()">
+                </div>
+                <div id="resultPenal" class="result-box-green">
+                    <div id="resultPenalText"></div>
+                </div>
+            </div>
+
+            <!-- HABITACIONAL -->
+            <div id="calcHabitacional" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Financiamento habitacional — SAC × Tabela PRICE</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">SAC (amortização constante) e PRICE (parcela constante). SFH regulado pela Lei 4.380/64. Compare para revisão contratual (anatocismo — Súmula 121 STF em contratos abusivos).</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>VALOR FINANCIADO (R$)</label>
+                        <input type="number" id="habValor" class="form-control" value="300000" oninput="calcHabitacional()">
+                    </div>
+                    <div class="form-group">
+                        <label>TAXA NOMINAL (% AO ANO)</label>
+                        <input type="number" id="habTaxa" class="form-control" value="10.5" step="0.1" oninput="calcHabitacional()">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>PRAZO (MESES)</label>
+                        <input type="number" id="habPrazo" class="form-control" value="360" oninput="calcHabitacional()">
+                    </div>
+                    <div class="form-group">
+                        <label>SISTEMA</label>
+                        <select id="habSistema" class="form-control" onchange="calcHabitacional()">
+                            <option value="sac">SAC — parcelas decrescentes</option>
+                            <option value="price">Tabela PRICE — parcelas fixas</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="resultHab" class="result-box-green">
+                    <div id="resultHabText"></div>
+                </div>
+            </div>
+
+            <!-- TRABALHISTA -->
+            <div id="calcTrabalhista" class="card calc-section hidden" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.5rem; margin-bottom: 0.3rem; font-family: var(--font-serif);">Trabalhista — rescisão, horas extras e FGTS</h2>
+                <p style="font-size: 0.85rem; color: #818cf8; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">Base: CLT arts. 477, 479, 487; Lei 8.036/90 (FGTS); Lei 5.859/72; CF art. 7º.</p>
+                <div class="trabalhista-sub-tabs">
+                    <button class="trabalhista-sub-tab active" onclick="mudarSubTab(this, 'trabRescisao')">Rescisão</button>
+                    <button class="trabalhista-sub-tab" onclick="mudarSubTab(this, 'trabHorasExtras')">Horas extras</button>
+                    <button class="trabalhista-sub-tab" onclick="mudarSubTab(this, 'trabFGTS')">FGTS + multa 40%</button>
+                </div>
+
+                <!-- Sub: Rescisão -->
+                <div id="trabRescisao" class="trab-section active">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>SALÁRIO MENSAL (R$)</label>
+                            <input type="number" id="rescSalario" class="form-control" value="3000" oninput="calcRescisao()">
+                        </div>
+                        <div class="form-group">
+                            <label>MESES DE SERVIÇO</label>
+                            <input type="number" id="rescMeses" class="form-control" value="18" oninput="calcRescisao()">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>MOTIVO</label>
+                            <select id="rescMotivo" class="form-control" onchange="calcRescisao()">
+                                <option value="sem_justa">Dispensa sem justa causa</option>
+                                <option value="com_justa">Dispensa com justa causa</option>
+                                <option value="pedido">Pedido de demissão</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>AVISO PRÉVIO INDENIZADO</label>
+                            <div style="display: flex; align-items: center; height: 44px;">
+                                <label class="custom-checkbox" style="margin-top: 0.5rem;">
+                                    <input type="checkbox" id="rescAviso" checked onchange="calcRescisao()">
+                                    <span class="checkmark"></span>
+                                    Sim
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="custom-checkbox"><input type="checkbox" id="rescFerias" onchange="calcRescisao()"><span class="checkmark"></span>FÉRIAS VENCIDAS EM ABERTO</label>
+                    </div>
+                    <div id="resultRescisao" class="result-box-green">
+                        <div id="resultRescisaoText"></div>
+                    </div>
+                </div>
+
+                <!-- Sub: Horas Extras -->
+                <div id="trabHorasExtras" class="trab-section">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>SALÁRIO MENSAL (R$)</label>
+                            <input type="number" id="heSalario" class="form-control" value="3000" oninput="calcHorasExtras()">
+                        </div>
+                        <div class="form-group">
+                            <label>QTD. DE HORAS EXTRAS NO PERÍODO</label>
+                            <input type="number" id="heQtd" class="form-control" value="20" oninput="calcHorasExtras()">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>ADICIONAL</label>
+                            <select id="heAdicional" class="form-control" onchange="calcHorasExtras()">
+                                <option value="50">50% (dias úteis — CF art. 7º XVI)</option>
+                                <option value="100">100% (domingos e feriados)</option>
+                                <option value="75">75% (acordo coletivo)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ADICIONAL NOTURNO (+20%)</label>
+                            <div style="display: flex; align-items: center; height: 44px;">
+                                <label class="custom-checkbox" style="margin-top: 0.5rem;">
+                                    <input type="checkbox" id="heNoturno" onchange="calcHorasExtras()">
+                                    <span class="checkmark"></span>
+                                    Sim
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultHE" class="result-box-green">
+                        <div id="resultHEText"></div>
+                    </div>
+                </div>
+
+                <!-- Sub: FGTS -->
+                <div id="trabFGTS" class="trab-section">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>SALÁRIO MENSAL (R$)</label>
+                            <input type="number" id="fgtsSalario" class="form-control" value="3000" oninput="calcFGTS()">
+                        </div>
+                        <div class="form-group">
+                            <label>MESES TRABALHADOS</label>
+                            <input type="number" id="fgtsMeses" class="form-control" value="24" oninput="calcFGTS()">
+                        </div>
+                    </div>
+                    <div id="resultFGTS" class="result-box-green">
+                        <div id="resultFGTSText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // Tab switching
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('#calcTabs .calc-tab');
+            const sections = document.querySelectorAll('.calc-section');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const targetId = tab.getAttribute('data-target');
+                    sections.forEach(sec => {
+                        sec.id === targetId ? sec.classList.remove('hidden') : sec.classList.add('hidden');
+                    });
+                });
+            });
+            // Init live calcs
+            calcAbusivos();
+            calcPensao();
+            calcPenal();
+            calcHabitacional();
+            calcRescisao();
+            calcHorasExtras();
+            calcFGTS();
+        });
+
+        function mudarSubTab(btn, secId) {
+            document.querySelectorAll('.trabalhista-sub-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.trab-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(secId).classList.add('active');
+        }
+
+        function fmt(v) { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+        function calcPrazos() {
+            const data = document.getElementById('dataIntimacao').value;
+            const dias = parseInt(document.getElementById('prazoDias').value) || 15;
+            if (!data) return;
+            const d = new Date(data);
+            d.setDate(d.getDate() + 1 + dias);
+            document.getElementById('resultPrazos').classList.remove('hidden');
+            document.getElementById('resultPrazosText').innerHTML = `<strong>Data de início:</strong> ${new Date(data + 'T00:00:00').toLocaleDateString('pt-BR')}<br><strong>Vencimento do prazo:</strong> ${d.toLocaleDateString('pt-BR')}`;
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('dataIntimacao').addEventListener('change', calcPrazos);
+            document.getElementById('prazoDias').addEventListener('input', calcPrazos);
+        });
+
+        function calcJuros() {
+            const principal = parseFloat(document.getElementById('jcValor').value) || 0;
+            const d1 = new Date(document.getElementById('jcDataInicial').value);
+            const d2 = new Date(document.getElementById('jcDataFinal').value);
+            const jurosM = parseFloat(document.getElementById('jcJuros').value) / 100 || 0.01;
+            const ipca = parseFloat(document.getElementById('jcIPCA').value) / 100 || 0.045;
+            const tipo = document.getElementById('jcTipo').value;
+            if (!principal || isNaN(d1) || isNaN(d2)) return;
+            const meses = Math.round((d2 - d1) / (30.44 * 24 * 3600 * 1000));
+            let totalJuros;
+            if (tipo === 'simples') totalJuros = principal * jurosM * meses;
+            else totalJuros = principal * (Math.pow(1 + jurosM, meses) - 1);
+            const totalCorrecao = principal * (Math.pow(1 + ipca / 12, meses) - 1);
+            const total = principal + totalJuros + totalCorrecao;
+            document.getElementById('resultJuros').classList.remove('hidden');
+            document.getElementById('resultJurosText').innerHTML = `Período: <strong>${meses} meses</strong><br>Juros acumulados: <strong>${fmt(totalJuros)}</strong><br>Correção monetária: <strong>${fmt(totalCorrecao)}</strong><br><br>Total atualizado: <strong style="font-size:1.1rem">${fmt(total)}</strong>`;
+        }
+
+        function calcAbusivos() {
+            const tc = parseFloat(document.getElementById('abTaxaContratada').value) || 0;
+            const tb = parseFloat(document.getElementById('abTaxaBCB').value) || 0;
+            const v = parseFloat(document.getElementById('abValor').value) || 0;
+            const n = parseInt(document.getElementById('abPrazo').value) || 0;
+            const limite = tb * 1.5;
+            const totalContratada = v * Math.pow(1 + tc / 100, n);
+            const totalBCB = v * Math.pow(1 + tb / 100, n);
+            const excesso = totalContratada - totalBCB;
+            document.getElementById('resultAbusivosText').innerHTML =
+                `Limite legal aproximado (150% da média): <strong>${limite.toFixed(2).replace('.', ',')}% a.m.</strong><br>` +
+                `Total pela taxa contratada: <strong>${fmt(totalContratada)}</strong><br>` +
+                `Total pela taxa média BCB: <strong>${fmt(totalBCB)}</strong><br>` +
+                `Excesso cobrado: <strong>${fmt(excesso)}</strong>`;
+        }
+
+        function calcPensao() {
+            const bruto = parseFloat(document.getElementById('pensBruto').value) || 0;
+            const inss = parseFloat(document.getElementById('pensINSS').value) / 100 || 0;
+            const irrf = parseFloat(document.getElementById('pensIRRF').value) || 0;
+            const outros = parseFloat(document.getElementById('pensOutros').value) || 0;
+            const perc = parseFloat(document.getElementById('pensPerc').value) / 100 || 0;
+            const mesesAtraso = parseInt(document.getElementById('pensMesesAtraso').value) || 0;
+            const selic = parseFloat(document.getElementById('pensSELIC').value) / 100 || 0.01;
+            const liquido = bruto - (bruto * inss) - irrf - outros;
+            const pensaoMensal = liquido * perc;
+            const anual = pensaoMensal * 13;
+            let debitoText = '';
+            if (mesesAtraso > 0) {
+                const debito = pensaoMensal * mesesAtraso * (1 + selic * mesesAtraso);
+                debitoText = `<br>Débito atrasado (${mesesAtraso} meses com SELIC): <strong>${fmt(debito)}</strong>`;
+            }
+            document.getElementById('resultPensaoText').innerHTML =
+                `Líquido de referência: <strong>${fmt(liquido)}</strong><br>` +
+                `Pensão mensal: <strong>${fmt(pensaoMensal)}</strong><br>` +
+                `Anual (incluindo 13º): <strong>${fmt(anual)}</strong>${debitoText}`;
+        }
+
+        function calcPenal() {
+            const total = parseInt(document.getElementById('penalTotal').value) || 0;
+            const fracao = parseInt(document.getElementById('penalTipo').value) || 16;
+            const diasTrab = parseInt(document.getElementById('penalTrab').value) || 0;
+            const horasEstudo = parseInt(document.getElementById('penalEstudo').value) || 0;
+            const detracao = parseInt(document.getElementById('penalDetracao').value) || 0;
+            const remicaoTrab = Math.floor(diasTrab / 3);
+            const remicaoEstudo = Math.floor(horasEstudo / 12);
+            const totalRemicao = remicaoTrab + remicaoEstudo;
+            const penaEfetiva = total - detracao - totalRemicao;
+            const diasProgressao = Math.ceil(penaEfetiva * fracao / 100);
+            const anosRestantes = (penaEfetiva / 365).toFixed(2);
+            document.getElementById('resultPenalText').innerHTML =
+                `Fração aplicável: <strong>${fracao}%</strong> da pena<br>` +
+                `Remição (trabalho + estudo): <strong>${totalRemicao} dias</strong><br>` +
+                `Detração: <strong>${detracao} dias</strong><br>` +
+                `Total já cumprido/abatido: <strong>${detracao + totalRemicao} dias</strong><br>` +
+                `Restante da pena: <strong>${penaEfetiva} dias (≈ ${anosRestantes} anos)</strong><br>` +
+                `Para progressão de regime (fechado): <strong>faltam ${diasProgressao} dias</strong>`;
+        }
+
+        function calcHabitacional() {
+            const pv = parseFloat(document.getElementById('habValor').value) || 0;
+            const taxaAnual = parseFloat(document.getElementById('habTaxa').value) / 100 || 0;
+            const n = parseInt(document.getElementById('habPrazo').value) || 0;
+            const sistema = document.getElementById('habSistema').value;
+            const i = taxaAnual / 12;
+            let primParcela, ultParcela, totalPago;
+            if (sistema === 'sac') {
+                const amort = pv / n;
+                primParcela = amort + pv * i;
+                ultParcela = amort + amort * i;
+                totalPago = n * amort + i * pv * (n + 1) / 2;
+            } else {
+                const price = pv * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+                primParcela = price;
+                ultParcela = price;
+                totalPago = price * n;
+            }
+            const jurosTotal = totalPago - pv;
+            document.getElementById('resultHabText').innerHTML =
+                `Primeira parcela: <strong>${fmt(primParcela)}</strong><br>` +
+                `Última parcela: <strong>${fmt(ultParcela)}</strong><br>` +
+                `Total pago em ${n} meses: <strong>${fmt(totalPago)}</strong><br>` +
+                `Juros totais: <strong>${fmt(jurosTotal)} (${((jurosTotal/pv)*100).toFixed(1)}% sobre o principal)</strong>`;
+        }
+
+        function calcRescisao() {
+            const sal = parseFloat(document.getElementById('rescSalario').value) || 0;
+            const meses = parseInt(document.getElementById('rescMeses').value) || 0;
+            const motivo = document.getElementById('rescMotivo').value;
+            const aviso = document.getElementById('rescAviso').checked;
+            const ferias = document.getElementById('rescFerias').checked;
+            const saldoSalario = sal;
+            const feriasProp = sal * (meses % 12) / 12 * (4 / 3);
+            const decimo = sal * (meses % 12) / 12;
+            const avisoPrev = aviso && motivo === 'sem_justa' ? sal + (sal / 30 * 3 * Math.floor(meses / 12)) : 0;
+            const fgtsAcum = sal * meses * 0.08;
+            const multaFGTS = motivo === 'sem_justa' ? fgtsAcum * 0.4 : 0;
+            const feriaVenc = ferias ? sal * 4 / 3 : 0;
+            const total = saldoSalario + feriasProp + decimo + avisoPrev + fgtsAcum + multaFGTS + feriaVenc;
+            document.getElementById('resultRescisaoText').innerHTML =
+                `Saldo de salário: <strong>${fmt(saldoSalario)}</strong><br>` +
+                `Férias proporcionais + 1/3: <strong>${fmt(feriasProp)}</strong><br>` +
+                `13º proporcional: <strong>${fmt(decimo)}</strong><br>` +
+                (avisoPrev > 0 ? `Aviso prévio: <strong>${fmt(avisoPrev)}</strong><br>` : '') +
+                `FGTS acumulado: <strong>${fmt(fgtsAcum)}</strong><br>` +
+                (multaFGTS > 0 ? `Multa FGTS: <strong>${fmt(multaFGTS)}</strong><br>` : '') +
+                (feriaVenc > 0 ? `Férias vencidas: <strong>${fmt(feriaVenc)}</strong><br>` : '') +
+                `<br><strong>Total estimado: ${fmt(total)}</strong>`;
+        }
+
+        function calcHorasExtras() {
+            const sal = parseFloat(document.getElementById('heSalario').value) || 0;
+            const qtd = parseInt(document.getElementById('heQtd').value) || 0;
+            const adicPercent = parseInt(document.getElementById('heAdicional').value) || 50;
+            const noturno = document.getElementById('heNoturno').checked;
+            const horaNormal = sal / 220;
+            const adicFinal = adicPercent / 100 + (noturno ? 0.2 : 0);
+            const valorHoraExtra = horaNormal * (1 + adicFinal);
+            const total = valorHoraExtra * qtd;
+            document.getElementById('resultHEText').innerHTML =
+                `Valor da hora normal: <strong>${fmt(horaNormal)}</strong><br>` +
+                `Total de horas extras devidas: <strong>${fmt(total)}</strong>`;
+        }
+
+        function calcFGTS() {
+            const sal = parseFloat(document.getElementById('fgtsSalario').value) || 0;
+            const meses = parseInt(document.getElementById('fgtsMeses').value) || 0;
+            const acum = sal * meses * 0.08;
+            const multa = acum * 0.4;
+            document.getElementById('resultFGTSText').innerHTML =
+                `FGTS acumulado (8% × meses): <strong>${fmt(acum)}</strong><br>` +
+                `Multa de 40% (dispensa sem justa causa): <strong>${fmt(multa)}</strong><br>` +
+                `Total exigível: <strong>${fmt(acum + multa)}</strong>`;
+        }
+    </script>
+</body>
+</html>

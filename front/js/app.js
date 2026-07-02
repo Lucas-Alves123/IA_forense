@@ -450,4 +450,296 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+
+    // --- Acessibilidade Global ---
+    const body = document.body;
+    
+    // Create the Accessibility Button
+    const accBtn = document.createElement('button');
+    accBtn.className = 'accessibility-btn';
+    accBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>';
+    accBtn.title = "Acessibilidade";
+    
+    // Create the Menu
+    const accMenu = document.createElement('div');
+    accMenu.className = 'accessibility-menu';
+    accMenu.innerHTML = `
+        <button id="accIncreaseFont"><span>A+</span> Aumentar Fonte</button>
+        <button id="accDecreaseFont"><span>A-</span> Diminuir Fonte</button>
+        <button id="accHighContrast"><span>◑</span> Alto Contraste</button>
+        <button id="accVoiceRead"><span>🔊</span> Leitura em Voz</button>
+    `;
+    
+    body.appendChild(accBtn);
+    body.appendChild(accMenu);
+    
+    // Toggle menu
+    accBtn.addEventListener('click', () => {
+        accMenu.classList.toggle('show');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!accBtn.contains(e.target) && !accMenu.contains(e.target)) {
+            accMenu.classList.remove('show');
+        }
+    });
+    
+    // Font Size Logic
+    let currentFontSize = 100; // Percentage
+    document.getElementById('accIncreaseFont').addEventListener('click', () => {
+        if(currentFontSize < 130) {
+            currentFontSize += 10;
+            document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+    });
+    document.getElementById('accDecreaseFont').addEventListener('click', () => {
+        if(currentFontSize > 80) {
+            currentFontSize -= 10;
+            document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+    });
+    
+    // High Contrast Logic
+    document.getElementById('accHighContrast').addEventListener('click', () => {
+        body.classList.toggle('high-contrast');
+    });
+
+    // Voice Reading Logic (Fix)
+    let isReading = false;
+    let utterance = null;
+    document.getElementById('accVoiceRead').addEventListener('click', () => {
+        if (isReading) {
+            window.speechSynthesis.cancel();
+            isReading = false;
+            document.getElementById('accVoiceRead').innerHTML = '<span>🔊</span> Leitura em Voz';
+            return;
+        }
+        const text = document.body.innerText
+            .replace(/\s+/g, ' ')
+            .substring(0, 5000);
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 0.95;
+        utterance.onend = () => {
+            isReading = false;
+            document.getElementById('accVoiceRead').innerHTML = '<span>🔊</span> Leitura em Voz';
+        };
+        window.speechSynthesis.speak(utterance);
+        isReading = true;
+        document.getElementById('accVoiceRead').innerHTML = '<span>⏹️</span> Parar leitura';
+        accMenu.classList.remove('show');
+    });
+
+    // --- Assistente IA (Chat Flutuante) - REDESENHADO ---
+    const assistenteStyles = `
+        .assistente-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.6);
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .assistente-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99, 102, 241, 0.75); }
+        .assistente-chat {
+            position: fixed;
+            bottom: 78px;
+            right: 20px;
+            width: 440px;
+            background: #0f172a;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 16px;
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            font-family: 'Inter', sans-serif;
+        }
+        .assistente-chat.show { display: flex; }
+        .assistente-chat-header {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .assistente-chat-header .header-title { font-weight: 700; font-size: 1rem; }
+        .assistente-chat-header .header-sub { font-size: 0.8rem; opacity: 0.85; margin-top: 2px; }
+        .assistente-chat-header button { background:transparent;border:none;color:white;cursor:pointer;font-size:1.3rem;line-height:1; }
+        .assistente-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            min-height: 160px;
+            max-height: 280px;
+        }
+        .chat-msg { padding: 0.9rem 1.1rem; border-radius: 10px; font-size: 0.88rem; line-height: 1.55; max-width: 92%; }
+        .chat-msg.ia { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2); align-self: flex-start; width: 100%; max-width: 100%; }
+        .chat-msg.user { background: rgba(203,161,83,0.15); border: 1px solid rgba(203,161,83,0.3); align-self: flex-end; }
+        .chat-suggestions { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.7rem; }
+        .chat-suggestion {
+            background: rgba(99,102,241,0.08);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 6px;
+            color: #818cf8;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-suggestion:hover { background: rgba(99,102,241,0.18); color: #a5b4fc; }
+        .assistente-chat-input {
+            padding: 1rem;
+            border-top: 1px solid rgba(99,102,241,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: rgba(15,23,42,0.8);
+        }
+        .assistente-chat-input textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(99,102,241,0.35);
+            border-radius: 8px;
+            color: white;
+            padding: 0.8rem 0.9rem;
+            font-size: 0.88rem;
+            outline: none;
+            resize: none;
+            min-height: 80px;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+        .assistente-chat-input textarea::placeholder { color: rgba(255,255,255,0.35); }
+        .assistente-chat-input textarea:focus { border-color: #6366f1; }
+        .assistente-send-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-size: 0.92rem;
+            font-weight: 600;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s;
+        }
+        .assistente-send-btn:hover { opacity: 0.9; }
+    `;
+    const styleEl = document.createElement('style');
+    styleEl.textContent = assistenteStyles;
+    document.head.appendChild(styleEl);
+
+    const assistenteBtn = document.createElement('button');
+    assistenteBtn.className = 'assistente-btn';
+    assistenteBtn.innerHTML = '💬 Assistente';
+
+    const assistenteChat = document.createElement('div');
+    assistenteChat.className = 'assistente-chat';
+    assistenteChat.innerHTML = `
+        <div class="assistente-chat-header">
+            <div>
+                <div class="header-title">Assistente do Estratégia Forense</div>
+                <div class="header-sub">Ajuda você a usar o sistema</div>
+            </div>
+            <button onclick="this.closest('.assistente-chat').classList.remove('show')">×</button>
+        </div>
+        <div class="assistente-chat-messages" id="chatMessages">
+            <div class="chat-msg ia">
+                Olá! Posso te ajudar a navegar pelo sistema. Experimente perguntar:
+                <div class="chat-suggestions">
+                    <button class="chat-suggestion" onclick="usarSugestao('Como analiso um processo?')">"Como analiso um processo?"</button>
+                    <button class="chat-suggestion" onclick="usarSugestao('Onde calculo prazo recursal?')">"Onde calculo prazo recursal?"</button>
+                    <button class="chat-suggestion" onclick="usarSugestao('Como envio mensagem ao cliente?')">"Como envio mensagem ao cliente?"</button>
+                    <button class="chat-suggestion" onclick="usarSugestao('Como pesquiso jurisprudência do STJ?')">"Como pesquiso jurisprudência do STJ?"</button>
+                </div>
+            </div>
+        </div>
+        <div class="assistente-chat-input">
+            <textarea id="chatInput" placeholder="Pergunte sobre o sistema..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarMensagem();}"></textarea>
+            <button class="assistente-send-btn" onclick="enviarMensagem()">Enviar</button>
+        </div>
+    `;
+    body.appendChild(assistenteBtn);
+    body.appendChild(assistenteChat);
+
+    assistenteBtn.addEventListener('click', () => {
+        assistenteChat.classList.toggle('show');
+    });
+
+    window.usarSugestao = function(texto) {
+        document.getElementById('chatInput').value = texto;
+        enviarMensagem();
+    };
+
+    window.enviarMensagem = function() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg) return;
+        const msgs = document.getElementById('chatMessages');
+        const userDiv = document.createElement('div');
+        userDiv.className = 'chat-msg user';
+        userDiv.textContent = msg;
+        msgs.appendChild(userDiv);
+        input.value = '';
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'chat-msg ia';
+        typingDiv.textContent = '✦ Digitando...';
+        typingDiv.id = 'typingIndicator';
+        msgs.appendChild(typingDiv);
+        msgs.scrollTop = msgs.scrollHeight;
+        setTimeout(() => {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+            const iaDiv = document.createElement('div');
+            iaDiv.className = 'chat-msg ia';
+            const msgLower = msg.toLowerCase();
+            let resp;
+            if (msgLower.includes('processo') || msgLower.includes('analis')) {
+                resp = 'Para analisar um processo, vá em "Novo Processo" no menu lateral, preencha os dados e faça upload do PDF. A IA gerará o relatório estratégico completo!';
+            } else if (msgLower.includes('prazo')) {
+                resp = 'Acesse "Calculadoras" e selecione a aba "📅 Prazos". Informe a data da intimação, o número de dias e o tipo (úteis ou corridos).';
+            } else if (msgLower.includes('email') || msgLower.includes('mensagem') || msgLower.includes('cliente')) {
+                resp = 'No menu clique em "E-mail IA". Cole o texto do e-mail recebido e a IA identificará prazos, cobranças e o que você precisa fazer.';
+            } else if (msgLower.includes('jurisprud') || msgLower.includes('stj') || msgLower.includes('stf')) {
+                resp = 'Acesse "Jurisprudência" no menu. Digite o tema ou tese jurídica e clique em "Pesquisar jurisprudência". Os julgados aparecem com links verificáveis.';
+            } else if (msgLower.includes('petição') || msgLower.includes('modelo')) {
+                resp = 'Vá em "Petições" no menu. Lá você encontra modelos por área. Clique em "Abrir modelo" para visualizar, adaptar com IA ou baixar.';
+            } else if (msgLower.includes('calculad')) {
+                resp = 'As calculadoras estão no menu. Temos: Prazos, Juros & Correção, Juros Abusivos, Pensão Alimentícia, Execução Penal, Habitacional e Trabalhista.';
+            } else {
+                const resp_list = [
+                    'Entendido! Para qualquer análise de processo: Novo Processo → Upload do PDF → Relatório IA.',
+                    'Use o menu lateral para navegar entre as funcionalidades do sistema.',
+                    'Explore: Calculadoras, Petições, Jurisprudência e E-mail IA no menu lateral.',
+                ];
+                resp = resp_list[Math.floor(Math.random() * resp_list.length)];
+            }
+            iaDiv.textContent = resp;
+            msgs.appendChild(iaDiv);
+            msgs.scrollTop = msgs.scrollHeight;
+        }, 800);
+        msgs.scrollTop = msgs.scrollHeight;
+    };
+
 });

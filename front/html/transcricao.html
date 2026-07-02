@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Áudio e Vídeo | Estratégia Forense IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo" style="text-align: center;">
+                <img src="../img/logo.png" alt="LexIA Logo" style="max-width: 90px; height: auto;">
+            </div>
+            <div class="sidebar-nav">
+                <a href="painel.html">Painel Geral</a>
+                <a href="novo_processo.html">Novo Processo</a>
+                <a href="historico.html">Histórico</a>
+                <a href="calculadoras.html">Calculadoras</a>
+                <a href="peticoes.html">Petições</a>
+                <a href="email_ia.html">E-mail IA</a>
+                <a href="jurisprudencia.html">Jurisprudência</a>
+                <a href="transcricao.html" class="active">Áudio/Vídeo</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sair do sistema
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="margin-bottom: 2rem; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎙️</div>
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: var(--font-sans);">Transcrição de áudio e vídeo</h1>
+                    <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">Envie gravações de audiências, reuniões ou depoimentos e receba o texto integral transcrito por IA.</p>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <form id="transcricaoForm">
+                        <div id="uploadAreaTrans" style="border: 2px dashed var(--border-color); border-radius: 8px; padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.3s; background-color: rgba(15, 23, 42, 0.4);">
+                            <div style="font-size: 2rem; color: var(--text-muted); margin-bottom: 1rem;">📁</div>
+                            <h3 style="font-family: var(--font-sans); margin-bottom: 0.5rem;">Arraste e solte o arquivo aqui</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0;">Ou clique para procurar no seu computador (MP3, MP4, WAV max 50MB)</p>
+                            <input type="file" id="fileInputTrans" style="display: none;" accept="audio/*,video/*">
+                        </div>
+                        
+                        <div id="loadingStateTrans" class="hidden" style="text-align: center; padding: 2rem 0;">
+                            <div class="spinner" style="border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent-gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 1rem auto;"></div>
+                            <p>A IA está transcrevendo o arquivo... Isso pode levar alguns minutos.</p>
+                            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+                        </div>
+
+                        <div id="actionButtonsTrans" style="margin-top: 1.5rem; text-align: center;">
+                            <button type="button" class="btn-primary" style="padding: 0.8rem 2.5rem;" onclick="document.getElementById('actionButtonsTrans').classList.add('hidden'); document.getElementById('loadingStateTrans').classList.remove('hidden'); setTimeout(() => { document.getElementById('loadingStateTrans').classList.add('hidden'); document.getElementById('resultadoTrans').classList.remove('hidden'); }, 2000);">Transcrever arquivo com IA</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Resultado -->
+                <div id="resultadoTrans" class="card hidden" style="border-color: var(--accent-gold);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.2rem; font-family: var(--font-sans); margin: 0;">Resultado da Transcrição</h3>
+                        <div>
+                            <button class="btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Copiar Texto</button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(15, 23, 42, 0.5); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.95rem; line-height: 1.6; max-height: 400px; overflow-y: auto;">
+                        <p><strong>[00:00:05] Juiz:</strong> Boa tarde a todos. Estamos dando início à audiência de instrução do processo número 12345-67.</p>
+                        <p><strong>[00:00:15] Advogado do Autor:</strong> Excelência, pela ordem, gostaria de solicitar a juntada de um documento novo que chegou ao meu conhecimento nesta manhã.</p>
+                        <p><strong>[00:00:25] Juiz:</strong> Pois não, doutor. Qual a natureza do documento?</p>
+                        <p><strong>[00:00:30] Advogado do Autor:</strong> Trata-se de uma troca de e-mails entre a empresa ré e o autor, comprovando a tentativa de acordo prévio.</p>
+                        <p><strong>[00:00:42] Juiz:</strong> Aberta vista à parte contrária para manifestação sobre o documento juntado. Tem a palavra o advogado da ré.</p>
+                        <p><em>(O texto continua...)</em></p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>

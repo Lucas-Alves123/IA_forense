@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-mail IA | Estratégia Forense IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo" style="text-align: center;">
+                <img src="../img/logo.png" alt="LexIA Logo" style="max-width: 90px; height: auto;">
+            </div>
+            <div class="sidebar-nav">
+                <a href="painel.html">Painel Geral</a>
+                <a href="novo_processo.html">Novo Processo</a>
+                <a href="historico.html">Histórico</a>
+                <a href="calculadoras.html">Calculadoras</a>
+                <a href="peticoes.html">Petições</a>
+                <a href="email_ia.html" class="active">E-mail IA</a>
+                <a href="jurisprudencia.html">Jurisprudência</a>
+                <a href="transcricao.html">Áudio/Vídeo</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Sair do sistema
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="margin-bottom: 2rem; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem; font-family: var(--font-sans);">Gestor de e-mail com IA</h1>
+                    <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">Cole o conteúdo de um e-mail (intimação, cobrança, mensagem de cliente). A IA identifica prazos, cobranças e o que você precisa fazer.</p>
+                    <div class="pill-badge" style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">
+                        Em breve: conexão direta com sua conta Gmail / Outlook.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form id="emailIaForm">
+                        <div class="form-group">
+                            <label for="emailContent">Conteúdo do e-mail</label>
+                            <textarea id="emailContent" class="form-control" style="min-height: 200px;" placeholder="Cole aqui o texto completo do e-mail recebido..."></textarea>
+                        </div>
+                        <div style="margin-top: 1.5rem; text-align: center;">
+                            <button type="button" class="btn-primary" style="padding: 0.8rem 2.5rem;">Analisar e-mail com IA</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Results area (Hidden by default, shown via JS ideally) -->
+                <div id="emailResults" class="card hidden" style="margin-top: 2rem; border-color: var(--accent-gold);">
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: #ef4444; margin: 0; font-family: var(--font-sans);">⚠️ Prazo fatal identificado em 15/07/2026!</h4>
+                    </div>
+                    
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Resumo da Mensagem</h3>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span class="pill-badge" style="margin: 0; font-size: 0.7rem; padding: 0.2rem 0.6rem; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">Intimação Eletrônica</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">E-mail enviado pelo Tribunal de Justiça contendo citação/intimação para apresentação de defesa.</p>
+                    
+                    <h3 style="font-size: 1.1rem; margin-top: 2rem; margin-bottom: 1rem;">Prazos Identificados</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="padding: 1rem; background: #0f172a; border-radius: 8px; border-left: 4px solid #ef4444;">
+                            <strong style="color: var(--text-main);">Defesa (Contestação)</strong><br>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Vence em: 15/07/2026 (15 dias úteis)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
